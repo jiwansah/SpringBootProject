@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 
 
 
@@ -24,6 +25,7 @@ public class MainApp {
     
     @EnableWebSecurity
 	@Configuration	
+	// we can remove prePostEnabled, securedEnabled, if we don't use @PreAuthorize @Secure in controller
 	@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -45,5 +47,10 @@ public class MainApp {
 //    public BCryptPasswordEncoder bCryptPasswordEncoder() {
 //        return new BCryptPasswordEncoder(); 
 //    }
+    
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
     
 }

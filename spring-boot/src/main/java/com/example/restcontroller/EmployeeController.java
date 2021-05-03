@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,13 +37,13 @@ public class EmployeeController {
 	
 
 	@GetMapping("/employees/{id}")
-	public ResponseEntity<Employee> employee(@PathVariable("id") int id) {
+	public Employee employee(@PathVariable("id") int id) {
 		
-		Optional<Employee> employee = employeeService.getByID(id);
-		if(employee.isPresent()) {
-			return new ResponseEntity<Employee>(employee.get(), HttpStatus.OK);
-		}
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		return employeeService.getByID(id);
+//		if(employee.isPresent()) {
+//			return new ResponseEntity<Employee>(employee.get(), HttpStatus.OK);
+//		}
+//		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 
 	@PostMapping("/employees")
@@ -51,15 +52,9 @@ public class EmployeeController {
 	}
 
 	@PutMapping("/employees/{id}")
-	public ResponseEntity<Employee> updateEmployee(@RequestBody Employee newEmployee, @PathVariable("id") int id) {
+	public Employee updateEmployee(@RequestBody Employee newEmployee, @PathVariable("id") int id) {
 		
 		Employee editEmployee = new Employee();
-		Optional<Employee> employee = employeeService.getByID(id);
-		if (employee.isPresent()) {
-			editEmployee = employee.get();
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
 		
 		editEmployee.setId(id);
 		editEmployee.setDesignation(newEmployee.getDesignation());
@@ -69,17 +64,13 @@ public class EmployeeController {
 		editEmployee.setProjectId(newEmployee.getProjectId());
 		editEmployee.setReportingOfficerId(newEmployee.getReportingOfficerId());
 		
-		return new ResponseEntity<Employee>(employeeService.update(editEmployee), HttpStatus.CREATED);
+		return employeeService.update(editEmployee);
 	}
 
 	@DeleteMapping("/employees/{id}")
-	public ResponseEntity<Employee> deleteEmployee(@PathVariable("id") int id) {
-		Optional<Employee> employee = employeeService.getByID(id);
-		if (!employee.isPresent()) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+	public void deleteEmployee(@PathVariable("id") int id) {
+		
 		employeeService.delete(id);
-		return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 	}
 
 	

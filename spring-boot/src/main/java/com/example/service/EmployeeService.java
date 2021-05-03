@@ -2,6 +2,7 @@ package com.example.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.entitybean.Employee;
+import com.example.exceptionHandling.EmptyInputException;
 import com.example.repository.EmployeeRepository;
 
 @Service
@@ -29,8 +31,13 @@ public class EmployeeService {
 	    return employee;
 	}
 	
-	public Optional<Employee> getByID(int id) {
-		return employeeRepository.findById(id);
+	public Employee getByID(int id) {
+		Optional<Employee> employee = employeeRepository.findById(id);
+		if(employee.isPresent()) {
+			return employee.get();
+		} else {
+			throw new NoSuchElementException();
+		}
 	}
 	
 	public Employee save(Employee employee) {
@@ -38,10 +45,11 @@ public class EmployeeService {
 	}
 	
 	public Employee update(Employee employee) {
-		if (employeeRepository.existsById(employee.getId()) ) {
-			return employeeRepository.save(employee);
-		}
-	    return null;
+		
+		 if (employee.getName() == null || employee.getName().equals("")) {
+			 throw new EmptyInputException("Employee name required");
+		 }
+		return employeeRepository.save(employee);
 	}
 	
 	public void delete(int id) {

@@ -18,6 +18,7 @@ public class User {
 	private long id;
 	
 	//@Column(name="USERNAME", nullable = false, unique = true)
+	@Column(nullable = false, unique = true)
 	private String userName;
 	
 	//@Column(name="PASSWORD", nullable = false)

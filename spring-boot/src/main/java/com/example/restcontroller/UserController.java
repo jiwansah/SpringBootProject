@@ -59,7 +59,7 @@ public class UserController {
 
 	@PostMapping("/api/services/controller/user/login")
 	public ResponseEntity<String> login(@RequestBody User loginData) {
-		User user = userService.getByUserName(loginData);
+		User user = userService.getByUser(loginData);
 		if(user==null) {
 			return new ResponseEntity<String>("UserName or Password is not correct ", HttpStatus.FORBIDDEN);
 		}
